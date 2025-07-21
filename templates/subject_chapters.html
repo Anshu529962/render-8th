@@ -1,0 +1,436 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Explore {{ subject }} topics in Marrow QBank for NEET PG preparation.">
+    <title>Marrow QBank - {{ subject }}</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        slate: {
+                            800: '#1e293b',
+                            700: '#334155',
+                            600: '#475569'
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        .dropdown-content {
+            display: none;
+        }
+        .dropdown:hover .dropdown-content,
+        .dropdown:focus-within .dropdown-content {
+            display: block;
+        }
+        
+        /* Enhanced sidebar styles matching home.html */
+        .sidebar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 200px;
+            height: 100vh;
+            background-color: #1a3d4a;
+            color: white;
+            display: flex;
+            flex-direction: column;
+            overflow-y: auto;
+            padding: 20px 0;
+        }
+        
+        .main-content {
+            margin-left: 200px;
+        }
+        
+        .nav-item {
+            transition: all 0.3s ease;
+            padding: 12px 20px;
+            cursor: pointer;
+            color: #b0bec5;
+            font-size: 14px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            text-decoration: none;
+        }
+        
+        .nav-item:hover {
+            background-color: #2a4d5a;
+            color: white;
+            text-decoration: none;
+        }
+        
+        .nav-item.active {
+            background-color: #2a4d5a;
+            color: white;
+        }
+        
+        .tips-section {
+            margin: 20px;
+            background-color: #2a4d5a;
+            border-radius: 8px;
+            padding: 15px;
+            font-size: 12px;
+        }
+        
+        /* Question count highlighting */
+        .question-count {
+            background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);
+            color: white;
+            padding: 2px 8px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: 600;
+            text-shadow: 0 1px 2px rgba(0,0,0,0.2);
+        }
+        
+        .rating-display {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+        
+        .status-badge {
+            font-size: 10px;
+            font-weight: 600;
+            padding: 2px 6px;
+            border-radius: 8px;
+            text-transform: uppercase;
+        }
+        
+        .status-pro {
+            background-color: #f59e0b;
+            color: #000;
+        }
+        
+        .status-free {
+            background-color: #10b981;
+            color: white;
+        }
+
+
+
+
+        /* Completion indicator */
+        .topic-completed {
+            position: relative;
+        }
+        
+        .topic-completed::after {
+            content: '✓';
+            position: absolute;
+            top: 8px;
+            right: 8px;
+            background: #10b981;
+            color: white;
+            border-radius: 50%;
+            width: 20px;
+            height: 20px;
+            font-size: 12px;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        @media (max-width: 768px) {
+            .sidebar {
+                width: 150px;
+            }
+            .main-content {
+                margin-left: 150px;
+            }
+        }
+        
+        @media (max-width: 576px) {
+            .sidebar {
+                width: 100%;
+                height: 60px;
+                position: fixed;
+                top: 0;
+                bottom: auto;
+                flex-direction: row;
+                align-items: center;
+                justify-content: space-between;
+                padding: 10px 20px;
+                overflow: visible;
+            }
+            .sidebar > *:not(.sidebar-brand) {
+                display: none;
+            }
+            .main-content {
+                margin-left: 0;
+                padding-top: 60px;
+            }
+        }
+    </style>
+</head>
+<body class="bg-gray-50 min-h-screen flex">
+    <!-- Enhanced Fixed Sidebar -->
+    <nav class="sidebar text-white" role="navigation" aria-label="Main navigation">
+        <!-- Header -->
+        <div class="px-5 pb-8">
+            <a href="{{ url_for('home') }}" class="text-2xl font-bold text-cyan-400 no-underline sidebar-brand">MBBS QBANK</a>
+        </div>
+
+
+
+
+
+        <!-- User Profile -->
+        <div class="px-5 pb-5">
+            <div class="flex items-center space-x-3">
+                <div class="w-10 h-10 bg-gray-600 rounded-full flex items-center justify-content">
+                    <span class="text-sm font-medium" aria-hidden="true">
+                        {% if session.username %}
+                            {{ session.username[0].upper() }}
+                        {% else %}
+                            S
+                        {% endif %}
+                    </span>
+                </div>
+                <div>
+                    <div class="flex items-center space-x-2">
+                        <span class="font-semibold text-sm">
+                            {% if session.username %}
+                                {{ session.username }}
+                            {% else %}
+                                Student
+                            {% endif %}
+                        </span>
+                        <span class="bg-orange-500 text-black text-xs px-2 py-0.5 rounded-xl font-bold">PRO</span>
+                    </div>
+                    <div class="text-xs bg-green-500 text-white px-2 py-0.5 rounded-xl mt-1 inline-block">Premium</div>
+                </div>
+            </div>
+        </div>
+
+
+
+
+
+        <!-- Course Info -->
+        <div class="px-5 pb-5">
+            <div class="text-sm" style="color: #b0bec5;">Course: <strong class="text-white">MBBS</strong></div>
+        </div>
+
+
+
+
+
+        <!-- Navigation -->
+        <div class="flex-1">
+            <ul class="list-none">
+                <li>
+                    <a href="{{ url_for('home') }}" class="nav-item">
+                        <span class="text-lg">🏦</span>
+                        <span>QBank</span>
+                    </a>
+                </li>
+                <li>
+                    {% if session.user_id %}
+                        <a href="{{ url_for('bookmarks') }}" class="nav-item">
+                            <span class="text-lg">📚</span>
+                            <span>Bookmarks</span>
+                        </a>
+                    {% else %}
+                        <button class="nav-item w-full text-left">
+                            <span class="text-lg">📚</span>
+                            <span>Bookmarks</span>
+                        </button>
+                    {% endif %}
+                </li>
+                <li>
+                    <button class="nav-item w-full text-left">
+                        <span class="text-lg">⚙️</span>
+                        <span>Custom Module</span>
+                    </button>
+                </li>
+                <li>
+                    <button class="nav-item w-full text-left">
+                        <span class="text-lg">💎</span>
+                        <span>Pearls</span>
+                    </button>
+                </li>
+                <li>
+                    <button class="nav-item w-full text-left">
+                        <span class="text-lg">🖼️</span>
+                        <span>Image Bank</span>
+                    </button>
+                </li>
+                <li>
+                    <button class="nav-item w-full text-left">
+                        <span class="text-lg">🧪</span>
+                        <span>Test Series</span>
+                    </button>
+                </li>
+                <li>
+                    <button class="nav-item w-full text-left">
+                        <span class="text-lg">🎥</span>
+                        <span>Videos</span>
+                    </button>
+                </li>
+            </ul>
+        </div>
+
+
+
+
+
+        <!-- Enhanced Tips Section -->
+        <div class="tips-section">
+            <div class="flex items-center space-x-2 mb-2">
+                <span class="text-lg">💡</span>
+                <span class="font-bold text-sm text-white">Study Tips</span>
+                <button class="ml-auto text-white text-base" aria-label="Close tip">×</button>
+            </div>
+            <p class="text-xs" style="color: #b0bec5; margin-bottom: 8px;">
+                Focus on high-yield topics and practice regularly for better retention.
+            </p>
+            <div class="text-center">
+                <button class="bg-transparent border border-white text-white py-1 px-4 rounded text-xs hover:bg-white hover:text-slate-800 transition-colors">
+                    Next Tip
+                </button>
+            </div>
+        </div>
+    </nav>
+
+
+
+
+
+    <!-- Main Content -->
+    <main class="main-content flex-1 p-5" role="main">
+        <!-- Breadcrumb -->
+        <nav class="flex items-center space-x-2 mb-3 text-xs text-gray-600" aria-label="Breadcrumb">
+            <a href="{{ url_for('home') }}" class="text-blue-500 hover:underline">All Subjects</a>
+            <span aria-hidden="true">›</span>
+            <span>{{ subject }}</span>
+        </nav>
+
+
+
+
+
+        <!-- Header -->
+        <div class="flex items-center justify-between mb-5">
+            <div class="flex items-center space-x-3">
+                <a href="{{ url_for('home') }}" class="text-blue-500 hover:text-blue-600 flex items-center" aria-label="Back to all subjects">
+                    <svg class="w-3 h-3 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
+                    </svg>
+                    <span class="text-sm">Back</span>
+                </a>
+                <h1 class="text-2xl font-bold text-gray-800">{{ subject }} – Chapters & Topics</h1>
+            </div>
+            <div class="flex items-center space-x-2">
+                <span class="text-xs text-gray-600">Sort by</span>
+                <div class="relative dropdown">
+                    <button class="bg-white border border-gray-300 rounded px-2 py-1 text-xs flex items-center space-x-1" aria-haspopup="true" aria-expanded="false">
+                        <span>Topic wise</span>
+                        <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                        </svg>
+                    </button>
+                    <div class="dropdown-content absolute right-0 mt-1 w-32 bg-white border border-gray-200 rounded-lg shadow-lg z-50">
+                        <a href="#" class="block px-3 py-1.5 text-xs text-gray-700 hover:bg-gray-100" role="menuitem">Topic wise</a>
+                        <a href="#" class="block px-3 py-1.5 text-xs text-gray-700 hover:bg-gray-100" role="menuitem">Difficulty</a>
+                        <a href="#" class="block px-3 py-1.5 text-xs text-gray-700 hover:bg-gray-100" role="menuitem">Recent</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+
+
+
+        <!-- Tabs -->
+        <div class="flex space-x-4 mb-5 border-b">
+            <button class="pb-2 border-b-2 border-blue-500 text-blue-600 font-medium text-sm" aria-current="true">All</button>
+            <button class="pb-2 border-b-2 border-transparent text-gray-600 hover:text-gray-800 text-sm">Completed</button>
+            <button class="pb-2 border-b-2 border-transparent text-gray-600 hover:text-gray-800 text-sm">Unattempted</button>
+            <button class="pb-2 border-b-2 border-transparent text-gray-600 hover:text-gray-800 text-sm">Free</button>
+        </div>
+
+
+
+
+
+        <!-- Chapters and Topics -->
+        {% if chapters %}
+            {% for chapter in chapters %}
+                <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-4 mb-4">
+                    <h2 class="text-lg font-semibold text-gray-800 mb-4 flex items-center">
+                        <div class="w-4 h-4 bg-cyan-400 rounded mr-3"></div>
+                        {{ chapter.chapter }}
+                        <span class="ml-auto text-sm text-gray-500">({{ chapter.topics|length }} topics)</span>
+                    </h2>
+                    <div class="space-y-3">
+                        {% for topic in chapter.topics %}
+                            <a href="{{ url_for('show_topic', subject_name=subject, topic_name=topic.name) }}" 
+                               class="block bg-gray-50 rounded-lg p-4 hover:bg-blue-50 hover:transform hover:translate-x-1 transition-all duration-300 border border-transparent hover:border-blue-200 {% if session.user_id and topic.completed %}topic-completed{% endif %}">
+                                <div class="flex items-center space-x-4">
+                                    <div class="flex-1 min-w-0">
+                                        <h3 class="font-medium text-gray-800 text-sm mb-2">
+                                            {% if topic.requires_login %}🔒{% endif %} {{ topic.name }}
+                                        </h3>
+                                        <div class="flex items-center space-x-4 text-xs">
+                                            <div class="rating-display">
+                                                <svg class="w-3 h-3 text-yellow-400" fill="currentColor" viewBox="0 0 20 20">
+                                                    <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/>
+                                                </svg>
+                                                <span class="text-gray-600">({{ topic.rating }})</span>
+                                            </div>
+                                            <span class="question-count">{{ topic.question_count }} Questions</span>
+                                            <span class="status-badge {% if topic.status == 'PRO' %}status-pro{% else %}status-free{% endif %}">
+                                                {{ topic.status }}
+                                            </span>
+                                            {% if session.user_id and topic.completed %}
+                                                <span class="text-green-600 text-xs font-bold">Completed</span>
+                                            {% endif %}
+                                        </div>
+                                    </div>
+                                    <div class="flex-shrink-0">
+                                        <svg class="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                                        </svg>
+                                    </div>
+                                </div>
+                            </a>
+                        {% endfor %}
+                    </div>
+                </div>
+            {% endfor %}
+        {% else %}
+            <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-8 text-center">
+                <div class="text-6xl mb-4">📚</div>
+                <h3 class="text-lg font-medium text-gray-800 mb-2">No chapters available</h3>
+                <p class="text-gray-600 text-sm">No chapters found for {{ subject }}. Please check back later.</p>
+            </div>
+        {% endif %}
+
+
+
+
+
+        <!-- Back Link -->
+        <div class="mt-6">
+            <a href="{{ url_for('home') }}" 
+               class="inline-flex items-center space-x-2 bg-gray-100 hover:bg-blue-500 hover:text-white border border-gray-300 rounded-lg px-5 py-3 text-blue-600 text-sm transition-all duration-300 hover:-translate-x-1">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
+                </svg>
+                <span>Back to All Subjects</span>
+            </a>
+        </div>
+    </main>
+</body>
+</html>
