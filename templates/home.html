@@ -140,7 +140,7 @@
             font-size: 16px;
         }
 
-        /* Main Content */
+        /* Main Content - Enhanced for Desktop */
         .main-content {
             margin-left: 200px;
             flex: 1;
@@ -159,14 +159,55 @@
             margin-bottom: 15px;
         }
 
-        /* Simplified content layout */
+        .welcome-message {
+            font-size: 1.1rem;
+            color: #666;
+            margin-bottom: 20px;
+        }
+
+        .auth-actions {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+
+        .auth-btn {
+            padding: 10px 20px;
+            border-radius: 6px;
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+
+        .btn-login {
+            background-color: #1a3d4a;
+            color: white;
+        }
+
+        .btn-signup {
+            background-color: #4dd0e1;
+            color: white;
+        }
+
+        .btn-logout {
+            background-color: #dc3545;
+            color: white;
+        }
+
+        .auth-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            text-decoration: none;
+            color: white;
+        }
+
         .main-section {
             display: flex;
             flex-direction: column;
             gap: 15px;
         }
 
-        /* Year Sections - Made smaller */
+        /* Year Sections */
         .year-section {
             background: white;
             border-radius: 8px;
@@ -197,7 +238,7 @@
             gap: 8px;
         }
 
-        /* Subject Cards - Made significantly smaller */
+        /* Subject Cards */
         .subject-card {
             background: #f8f9fa;
             border-radius: 6px;
@@ -218,7 +259,7 @@
             color: inherit;
         }
 
-        /* Subject Icons - Made smaller */
+        /* Subject Icons */
         .subject-icon {
             width: 32px;
             height: 32px;
@@ -236,11 +277,22 @@
         .subject-icon.pharmacology { background-color: #fff3e0; }
         .subject-icon.pathology { background-color: #ffebee; }
         .subject-icon.microbiology { background-color: #e0f2f1; }
-        .subject-icon.forensic { background-color: #fce4ec; }
-        .subject-icon.community { background-color: #f1f8e9; }
+        .subject-icon.forensicmedicine { background-color: #fce4ec; }
+        .subject-icon.psm { background-color: #f1f8e9; }
+        .subject-icon.ent { background-color: #e8eaf6; }
+        .subject-icon.ophthalmology { background-color: #fff8e1; }
+        .subject-icon.medicine { background-color: #e3f2fd; }
+        .subject-icon.surgery { background-color: #ffebee; }
+        .subject-icon.pediatrics { background-color: #f3e5f5; }
+        .subject-icon.obstetrics { background-color: #e8f5e8; }
+        .subject-icon.gynecology { background-color: #e8f5e8; }
+        .subject-icon.orthopedics { background-color: #fff3e0; }
+        .subject-icon.dermatology { background-color: #fce4ec; }
+        .subject-icon.psychiatry { background-color: #f1f8e9; }
+        .subject-icon.radiology { background-color: #e0f2f1; }
         .subject-icon.default { background-color: #f5f5f5; }
 
-        /* Subject Info - Made smaller */
+        /* Subject Info */
         .subject-info h3 {
             font-size: 14px;
             color: #333;
@@ -269,7 +321,74 @@
             margin-top: 2px;
         }
 
-        /* Responsive Design */
+        /* Enhanced Desktop Styles */
+        @media (min-width: 768px) {
+            .subject-list {
+                display: grid;
+                grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+                gap: 12px;
+            }
+            
+            .page-title {
+                font-size: 3rem;
+            }
+            
+            .year-section h2 {
+                font-size: 1.5rem;
+            }
+            
+            .subject-info h3 {
+                font-size: 16px;
+            }
+
+            .subject-icon {
+                width: 36px;
+                height: 36px;
+                font-size: 18px;
+            }
+        }
+
+        @media (min-width: 992px) {
+            .sidebar {
+                width: 240px;
+            }
+            
+            .main-content {
+                margin-left: 240px;
+                padding: 30px 60px;
+            }
+            
+            .year-section {
+                padding: 25px 30px;
+                margin-bottom: 25px;
+            }
+            
+            .subject-list {
+                grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+                gap: 15px;
+            }
+            
+            .subject-card {
+                padding: 15px 20px;
+            }
+
+            .subject-icon {
+                width: 40px;
+                height: 40px;
+                font-size: 20px;
+            }
+        }
+
+        @media (min-width: 1400px) {
+            .main-content {
+                max-width: 1200px;
+                margin-left: auto;
+                margin-right: auto;
+                padding-left: 240px;
+            }
+        }
+
+        /* Mobile Responsive Design */
         @media (max-width: 768px) {
             .sidebar {
                 width: 150px;
@@ -326,13 +445,21 @@
             .subject-card {
                 padding: 8px 10px;
             }
+            .auth-actions {
+                flex-direction: column;
+                gap: 10px;
+            }
+            .auth-btn {
+                text-align: center;
+                padding: 12px;
+            }
         }
     </style>
 </head>
 <body>
     <!-- Enhanced Sidebar -->
     <div class="sidebar">
-        <a class="sidebar-brand" href="#">MBBS QBANK</a>
+        <a class="sidebar-brand" href="{{ url_for('home') }}">MBBS QBANK</a>
         
         <div class="user-profile">
             <div class="profile-pic">
@@ -382,11 +509,11 @@
         <div class="tips-section">
             <div class="tips-header">
                 💡 Study Tips
-                <button class="close-btn">×</button>
+                <button class="close-btn" onclick="this.parentElement.parentElement.style.display='none'">×</button>
             </div>
             <div>Each MCQ comes with detailed explanations and concept linking.</div>
             <div style="text-align: center; margin-top: 10px;">
-                <button style="background: none; border: 1px solid white; color: white; padding: 5px 15px; border-radius: 4px; font-size: 12px;">Next Tip</button>
+                <button style="background: none; border: 1px solid white; color: white; padding: 5px 15px; border-radius: 4px; font-size: 12px;" onclick="alert('Feature coming soon!')">Next Tip</button>
             </div>
         </div>
     </div>
@@ -395,6 +522,23 @@
     <div class="main-content">
         <div class="page-header">
             <h1 class="page-title">Subjects by Professional Year</h1>
+            
+            {% if session.username %}
+                <div class="welcome-message">
+                    Welcome back, <strong>{{ session.username }}</strong>! Continue your medical studies.
+                </div>
+                <div class="auth-actions">
+                    <a href="{{ url_for('logout') }}" class="auth-btn btn-logout">Logout</a>
+                </div>
+            {% else %}
+                <div class="welcome-message">
+                    Access comprehensive MBBS question banks. Login to track your progress and bookmark questions.
+                </div>
+                <div class="auth-actions">
+                    <a href="{{ url_for('login') }}" class="auth-btn btn-login">Login</a>
+                    <a href="{{ url_for('signup') }}" class="auth-btn btn-signup">Sign Up</a>
+                </div>
+            {% endif %}
         </div>
         
         <div class="main-section">
@@ -407,16 +551,26 @@
                     <div class="subject-list">
                         {% for subject in subjects %}
                             <a href="{{ url_for('show_subject', subject_name=subject.name if subject.name is defined else subject) }}" class="subject-card">
-                                <div class="subject-icon {{ (subject.name if subject.name is defined else subject).lower().replace(' ', '') }}">
+                                <div class="subject-icon {{ (subject.name if subject.name is defined else subject).lower().replace(' ', '').replace('&', '') }}">
                                     {% set subject_name = subject.name if subject.name is defined else subject %}
                                     {% if 'anatomy' in subject_name.lower() %}🧠
                                     {% elif 'biochemistry' in subject_name.lower() %}🧪
-                                    {% elif 'physiology' in subject_name.lower() %}👤
+                                    {% elif 'physiology' in subject_name.lower() %}❤️
                                     {% elif 'pharmacology' in subject_name.lower() %}💊
                                     {% elif 'pathology' in subject_name.lower() %}🔬
                                     {% elif 'microbiology' in subject_name.lower() %}🦠
                                     {% elif 'forensic' in subject_name.lower() %}⚖️
-                                    {% elif 'community' in subject_name.lower() %}🏥
+                                    {% elif 'psm' in subject_name.lower() %}🏥
+                                    {% elif 'ent' in subject_name.lower() %}👂
+                                    {% elif 'ophthalmology' in subject_name.lower() %}👁️
+                                    {% elif 'medicine' in subject_name.lower() %}🩺
+                                    {% elif 'surgery' in subject_name.lower() %}🔪
+                                    {% elif 'pediatrics' in subject_name.lower() %}👶
+                                    {% elif 'obstetrics' in subject_name.lower() or 'gynecology' in subject_name.lower() %}🤱
+                                    {% elif 'orthopedics' in subject_name.lower() %}🦴
+                                    {% elif 'dermatology' in subject_name.lower() %}🧴
+                                    {% elif 'psychiatry' in subject_name.lower() %}🧠
+                                    {% elif 'radiology' in subject_name.lower() %}📡
                                     {% else %}📖
                                     {% endif %}
                                 </div>
@@ -429,6 +583,10 @@
                                         <div class="progress-text">
                                             {{ subject.completed_topics }}/{{ subject.total_topics }} topics completed
                                         </div>
+                                    {% elif not session.user_id %}
+                                        <div class="progress-text">
+                                            Login to track progress
+                                        </div>
                                     {% endif %}
                                 </div>
                             </a>
@@ -440,5 +598,29 @@
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Enhanced interactivity
+        document.addEventListener('DOMContentLoaded', function() {
+            // Add click animation to subject cards
+            const subjectCards = document.querySelectorAll('.subject-card');
+            subjectCards.forEach(card => {
+                card.addEventListener('click', function(e) {
+                    this.style.transform = 'scale(0.98)';
+                    setTimeout(() => {
+                        this.style.transform = '';
+                    }, 150);
+                });
+            });
+
+            // Close tips section
+            const closeBtn = document.querySelector('.close-btn');
+            if (closeBtn) {
+                closeBtn.addEventListener('click', function() {
+                    this.closest('.tips-section').style.display = 'none';
+                });
+            }
+        });
+    </script>
 </body>
 </html>
+
