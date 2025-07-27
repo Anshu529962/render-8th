@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="My Bookmarks - Marrow QBank for NEET PG preparation.">
-    <title>Marrow QBank - Bookmarks</title>
+    <meta name="description" content="My Bookmarks - MBBS QBank for medical preparation.">
+    <title>MBBS QBank - Bookmarks</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
         tailwind.config = {
@@ -22,7 +22,11 @@
         }
     </script>
     <style>
-        /* Enhanced sidebar styles matching home.html */
+        * {
+            box-sizing: border-box;
+        }
+
+        /* Enhanced sidebar styles - Mobile first */
         .sidebar {
             position: fixed;
             top: 0;
@@ -35,10 +39,13 @@
             flex-direction: column;
             overflow-y: auto;
             padding: 20px 0;
+            z-index: 1000;
         }
         
         .main-content {
             margin-left: 200px;
+            min-height: 100vh;
+            padding: 20px;
         }
         
         .nav-item {
@@ -51,6 +58,10 @@
             align-items: center;
             gap: 10px;
             text-decoration: none;
+            border: none;
+            background: none;
+            width: 100%;
+            text-align: left;
         }
         
         .nav-item:hover {
@@ -72,13 +83,14 @@
             font-size: 12px;
         }
 
-        /* Bookmark-specific styles */
+        /* Bookmark-specific styles - Mobile optimized */
         .bookmark-summary-section {
             background: white;
             border-radius: 8px;
             padding: 0;
             box-shadow: 0 1px 3px rgba(0,0,0,0.1);
             margin-bottom: 30px;
+            overflow: hidden;
         }
         
         .total-bookmarks-header {
@@ -87,6 +99,7 @@
             padding: 20px;
             border-bottom: 1px solid #e9ecef;
             margin: 0;
+            font-weight: 600;
         }
         
         .subject-section {
@@ -104,6 +117,7 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
+            min-height: 60px; /* Touch-friendly height */
         }
         
         .subject-title:hover {
@@ -113,6 +127,10 @@
         .bookmark-count {
             color: #6c757d;
             font-weight: normal;
+            background: #f8f9fa;
+            padding: 4px 8px;
+            border-radius: 12px;
+            font-size: 14px;
         }
         
         .tip-box {
@@ -123,16 +141,19 @@
             margin-top: 30px;
             display: flex;
             align-items: flex-start;
+            flex-wrap: wrap;
         }
         
         .tip-icon {
             color: #f39c12;
             margin-right: 10px;
             font-size: 20px;
+            flex-shrink: 0;
         }
         
         .tip-content {
             flex: 1;
+            min-width: 250px;
         }
         
         .tip-title {
@@ -156,7 +177,7 @@
             text-decoration: underline;
         }
 
-        /* Enhanced Bookmark Card Styles - Keep all existing functionality */
+        /* Enhanced Bookmark Card Styles - Mobile optimized */
         .bookmark-card {
             background: white;
             border-radius: 12px;
@@ -166,21 +187,27 @@
             border: 1px solid #e8ecef;
             overflow: hidden;
         }
+        
         .bookmark-card:hover {
             box-shadow: 0 8px 25px rgba(0,0,0,0.12);
-            transform: translateY(-3px);
+            transform: translateY(-2px);
         }
+        
         .bookmark-header {
             background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
             padding: 16px 20px;
             border-bottom: 2px solid #e9ecef;
             display: flex;
             justify-content: space-between;
-            align-items: center;
+            align-items: flex-start;
+            flex-wrap: wrap;
+            gap: 10px;
         }
+        
         .bookmark-content {
             padding: 20px;
         }
+        
         .subject-tag {
             background: linear-gradient(135deg, #007bff 0%, #0056b3 100%);
             color: white;
@@ -189,9 +216,12 @@
             font-size: 12px;
             font-weight: 600;
             margin-right: 10px;
+            margin-bottom: 5px;
             text-transform: uppercase;
             letter-spacing: 0.5px;
+            display: inline-block;
         }
+        
         .topic-tag {
             background: linear-gradient(135deg, #6c757d 0%, #495057 100%);
             color: white;
@@ -200,7 +230,9 @@
             font-size: 12px;
             font-weight: 500;
             text-transform: capitalize;
+            display: inline-block;
         }
+        
         .question-text {
             color: #2c3e50;
             margin: 16px 0;
@@ -211,7 +243,9 @@
             padding: 15px;
             border-left: 4px solid #007bff;
             border-radius: 0 8px 8px 0;
+            word-wrap: break-word;
         }
+        
         .answer-preview {
             color: #495057;
             margin: 16px 0;
@@ -222,7 +256,9 @@
             border-left: 4px solid #007bff;
             border-radius: 0 8px 8px 0;
             position: relative;
+            word-wrap: break-word;
         }
+        
         .answer-preview::before {
             content: "💡";
             position: absolute;
@@ -230,40 +266,33 @@
             right: 15px;
             font-size: 18px;
         }
-        .remove-bookmark-btn {
-            background: linear-gradient(135deg, #1a3d4a 0%, #2a4d5a 100%);
-            color: white;
-            border: none;
-            padding: 8px 16px;
-            border-radius: 6px;
-            font-size: 12px;
-            font-weight: 500;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
+        
+        .btn-group-custom {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-bottom: 15px;
         }
-        .remove-bookmark-btn:hover {
-            background: linear-gradient(135deg, #2a4d5a 0%, #3a5d6a 100%);
-            transform: translateY(-1px);
-            box-shadow: 0 4px 12px rgba(26, 61, 74, 0.3);
-        }
+        
         .view-question-btn {
             background: linear-gradient(135deg, #1a3d4a 0%, #2a4d5a 100%);
             color: white;
             border: none;
-            padding: 10px 20px;
+            padding: 12px 20px;
             border-radius: 6px;
             text-decoration: none;
             display: inline-block;
-            margin-right: 10px;
-            margin-bottom: 8px;
             font-size: 14px;
             font-weight: 500;
             transition: all 0.3s ease;
             text-transform: uppercase;
             letter-spacing: 0.5px;
+            min-height: 44px;
+            min-width: 140px;
+            text-align: center;
+            flex: 1;
         }
+        
         .view-question-btn:hover {
             background: linear-gradient(135deg, #2a4d5a 0%, #3a5d6a 100%);
             color: white;
@@ -271,28 +300,50 @@
             transform: translateY(-1px);
             box-shadow: 0 4px 12px rgba(26, 61, 74, 0.3);
         }
-        .view-answer-btn {
-            background: linear-gradient(135deg, #1a3d4a 0%, #2a4d5a 100%);
+        
+        .remove-bookmark-btn {
+            background: linear-gradient(135deg, #dc3545 0%, #c82333 100%);
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 6px;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            min-height: 44px;
+            min-width: 120px;
         }
-        .view-answer-btn:hover {
-            background: linear-gradient(135deg, #2a4d5a 0%, #3a5d6a 100%);
-            box-shadow: 0 4px 12px rgba(26, 61, 74, 0.3);
+        
+        .remove-bookmark-btn:hover {
+            background: linear-gradient(135deg, #c82333 0%, #a71e2a 100%);
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(220, 53, 69, 0.3);
         }
+        
         .bookmark-date {
             color: #6c757d;
             font-size: 12px;
             font-weight: 500;
+            margin-top: 5px;
         }
+        
         .filter-buttons {
             margin-bottom: 25px;
             text-align: center;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            justify-content: center;
         }
+        
         .filter-btn {
             background-color: white;
             color: #495057;
             border: 2px solid #e9ecef;
-            padding: 10px 20px;
-            margin: 5px;
+            padding: 12px 20px;
             border-radius: 25px;
             font-size: 14px;
             font-weight: 500;
@@ -300,7 +351,10 @@
             transition: all 0.3s ease;
             text-transform: uppercase;
             letter-spacing: 0.5px;
+            min-height: 44px;
+            white-space: nowrap;
         }
+        
         .filter-btn:hover, .filter-btn.active {
             background: linear-gradient(135deg, #1a3d4a 0%, #2a4d5a 100%);
             color: white;
@@ -308,16 +362,52 @@
             transform: translateY(-2px);
             box-shadow: 0 4px 15px rgba(26, 61, 74, 0.3);
         }
+        
+        /* View toggle buttons - Mobile optimized */
+        .view-toggle {
+            margin-bottom: 20px;
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+        
+        .toggle-btn {
+            background: #4fc3c3;
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 500;
+            min-height: 44px;
+            min-width: 120px;
+            transition: all 0.3s ease;
+        }
+        
+        .toggle-btn.active {
+            background: #1a3d4a;
+            box-shadow: 0 2px 8px rgba(26, 61, 74, 0.3);
+        }
+        
+        .toggle-btn:hover {
+            transform: translateY(-1px);
+        }
+        
+        /* Animations */
         .fade-in {
             animation: fadeIn 0.6s ease-in;
         }
+        
         @keyframes fadeIn {
             from { opacity: 0; transform: translateY(20px); }
             to { opacity: 1; transform: translateY(0); }
         }
+        
         .remove-animation {
             animation: slideOut 0.5s ease-in-out forwards;
         }
+        
         @keyframes slideOut {
             to { 
                 opacity: 0; 
@@ -327,48 +417,48 @@
                 padding: 0;
             }
         }
+        
         .no-bookmarks {
             text-align: center;
-            padding: 80px 20px;
+            padding: 60px 20px;
             color: #6c757d;
         }
+        
         .no-bookmarks-icon {
             font-size: 80px;
             margin-bottom: 30px;
             opacity: 0.6;
             animation: float 3s ease-in-out infinite;
         }
+        
         @keyframes float {
             0%, 100% { transform: translateY(0px); }
             50% { transform: translateY(-10px); }
         }
 
-        /* Toggle between Marrow view and detailed view */
-        .view-toggle {
-            margin-bottom: 20px;
-        }
-        .toggle-btn {
-            background: #4fc3c3;
-            color: white;
-            border: none;
-            padding: 8px 16px;
-            border-radius: 4px;
-            margin-right: 10px;
-            cursor: pointer;
-        }
-        .toggle-btn.active {
-            background: #1a3d4a;
-        }
-        
+        /* Tablet styles */
         @media (max-width: 768px) {
             .sidebar {
                 width: 150px;
             }
             .main-content {
                 margin-left: 150px;
+                padding: 15px;
+            }
+            .bookmark-content {
+                padding: 15px;
+            }
+            .question-text, .answer-preview {
+                padding: 12px;
+                font-size: 15px;
+            }
+            .view-question-btn {
+                min-width: 120px;
+                padding: 10px 16px;
             }
         }
         
+        /* Mobile styles */
         @media (max-width: 576px) {
             .sidebar {
                 width: 100%;
@@ -382,12 +472,118 @@
                 padding: 10px 20px;
                 overflow: visible;
             }
+            
             .sidebar > *:not(.sidebar-brand) {
                 display: none;
             }
+            
+            .sidebar-brand {
+                font-size: 1.2rem !important;
+                padding: 0 !important;
+            }
+            
             .main-content {
                 margin-left: 0;
-                padding-top: 60px;
+                padding-top: 80px;
+                padding-left: 15px;
+                padding-right: 15px;
+            }
+            
+            .bookmark-header {
+                padding: 12px 15px;
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 8px;
+            }
+            
+            .bookmark-content {
+                padding: 15px;
+            }
+            
+            .question-text, .answer-preview {
+                padding: 12px;
+                font-size: 14px;
+                margin: 12px 0;
+            }
+            
+            .btn-group-custom {
+                flex-direction: column;
+                width: 100%;
+            }
+            
+            .view-question-btn {
+                width: 100%;
+                margin-bottom: 8px;
+                padding: 14px;
+                font-size: 16px;
+            }
+            
+            .remove-bookmark-btn {
+                width: 100%;
+                padding: 14px;
+                font-size: 16px;
+                background: linear-gradient(135deg, #dc3545 0%, #c82333 100%);
+            }
+            
+            .filter-buttons {
+                padding: 0 10px;
+            }
+            
+            .filter-btn {
+                padding: 10px 16px;
+                font-size: 12px;
+                min-width: auto;
+            }
+            
+            .subject-title {
+                padding: 15px;
+                font-size: 15px;
+            }
+            
+            .total-bookmarks-header {
+                padding: 15px;
+                font-size: 15px;
+            }
+            
+            .tip-box {
+                margin: 20px 0;
+                padding: 15px;
+                flex-direction: column;
+            }
+            
+            .tip-content {
+                min-width: auto;
+                margin-top: 10px;
+            }
+            
+            .view-toggle {
+                justify-content: center;
+            }
+            
+            .toggle-btn {
+                flex: 1;
+                max-width: 150px;
+            }
+        }
+
+        /* Very small screens */
+        @media (max-width: 360px) {
+            .main-content {
+                padding-left: 10px;
+                padding-right: 10px;
+            }
+            
+            .bookmark-card {
+                margin-bottom: 15px;
+            }
+            
+            .bookmark-content {
+                padding: 12px;
+            }
+            
+            .subject-tag, .topic-tag {
+                font-size: 11px;
+                padding: 4px 8px;
             }
         }
     </style>
@@ -408,7 +604,7 @@
                         {% if session.username %}
                             {{ session.username[0].upper() }}
                         {% else %}
-                            A
+                            S
                         {% endif %}
                     </span>
                 </div>
@@ -418,19 +614,19 @@
                             {% if session.username %}
                                 {{ session.username }}
                             {% else %}
-                                Anshu
+                                Student
                             {% endif %}
                         </span>
                         <span class="bg-orange-500 text-black text-xs px-2 py-0.5 rounded-xl font-bold">PRO</span>
                     </div>
-                    <div class="text-xs bg-green-500 text-white px-2 py-0.5 rounded-xl mt-1 inline-block">Plan C</div>
+                    <div class="text-xs bg-green-500 text-white px-2 py-0.5 rounded-xl mt-1 inline-block">Premium</div>
                 </div>
             </div>
         </div>
 
         <!-- Course Info -->
         <div class="px-5 pb-5">
-            <div class="text-sm" style="color: #b0bec5;">Course: <strong class="text-white">NEET PG</strong></div>
+            <div class="text-sm" style="color: #b0bec5;">Course: <strong class="text-white">MBBS</strong></div>
         </div>
 
         <!-- Navigation -->
@@ -449,31 +645,31 @@
                     </a>
                 </li>
                 <li>
-                    <button class="nav-item w-full text-left">
+                    <button class="nav-item">
                         <span class="text-lg">⚙️</span>
                         <span>Custom Module</span>
                     </button>
                 </li>
                 <li>
-                    <button class="nav-item w-full text-left">
+                    <button class="nav-item">
                         <span class="text-lg">💎</span>
                         <span>Pearls</span>
                     </button>
                 </li>
                 <li>
-                    <button class="nav-item w-full text-left">
+                    <button class="nav-item">
                         <span class="text-lg">🖼️</span>
                         <span>Image Bank</span>
                     </button>
                 </li>
                 <li>
-                    <button class="nav-item w-full text-left">
+                    <button class="nav-item">
                         <span class="text-lg">🧪</span>
                         <span>Test Series</span>
                     </button>
                 </li>
                 <li>
-                    <button class="nav-item w-full text-left">
+                    <button class="nav-item">
                         <span class="text-lg">🎥</span>
                         <span>Videos</span>
                     </button>
@@ -486,13 +682,13 @@
             <div class="flex items-center space-x-2 mb-2">
                 <span class="text-lg">💡</span>
                 <span class="font-bold text-sm text-white">Study Tips</span>
-                <button class="ml-auto text-white text-base" aria-label="Close tip">×</button>
+                <button class="ml-auto text-white text-base" aria-label="Close tip" onclick="this.closest('.tips-section').style.display='none'">×</button>
             </div>
             <p class="text-xs" style="color: #b0bec5; margin-bottom: 8px;">
                 Focus on high-yield topics and practice regularly for better retention.
             </p>
             <div class="text-center">
-                <button class="bg-transparent border border-white text-white py-1 px-4 rounded text-xs hover:bg-white hover:text-slate-800 transition-colors">
+                <button class="bg-transparent border border-white text-white py-1 px-4 rounded text-xs hover:bg-white hover:text-slate-800 transition-colors" onclick="alert('Feature coming soon!')">
                     Next Tip
                 </button>
             </div>
@@ -500,7 +696,7 @@
     </nav>
 
     <!-- Main Content -->
-    <main class="main-content flex-1 p-5" role="main">
+    <main class="main-content flex-1" role="main">
         <!-- Breadcrumb -->
         <nav class="flex items-center space-x-2 mb-3 text-xs text-gray-600" aria-label="Breadcrumb">
             <a href="{{ url_for('home') }}" class="text-blue-500 hover:underline">QBank</a>
@@ -509,7 +705,7 @@
         </nav>
 
         <!-- Header -->
-        <div class="flex items-center justify-between mb-5">
+        <div class="flex items-center justify-between mb-5 flex-wrap gap-3">
             <div class="flex items-center space-x-3">
                 <a href="{{ url_for('home') }}" class="text-blue-500 hover:text-blue-600 flex items-center" aria-label="Back to home">
                     <svg class="w-3 h-3 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
@@ -528,7 +724,7 @@
         </div>
         
         {% if bookmarks %}
-            <!-- Marrow-style List View -->
+            <!-- List View -->
             <div id="listView">
                 <div class="bookmark-summary-section">
                     <div class="total-bookmarks-header">
@@ -544,7 +740,7 @@
                         <div class="subject-section">
                             <div class="subject-title" onclick="filterBySubject('{{ subject }}')">
                                 <span>{{ subject }}</span>
-                                <span class="bookmark-count">({{ count }})</span>
+                                <span class="bookmark-count">{{ count }}</span>
                             </div>
                         </div>
                     {% endfor %}
@@ -563,7 +759,7 @@
                 </div>
             </div>
 
-            <!-- Detailed View (Your original cards) - REMOVED PROGRESS BOX -->
+            <!-- Detailed View -->
             <div id="detailView" style="display: none;">
                 <!-- Filter Buttons -->
                 <div class="filter-buttons fade-in">
@@ -617,7 +813,7 @@
                                             👁️ View Question
                                         </a>
                                         <a href="{{ url_for('show_answer', subject_name=bookmark.subject, topic_name=bookmark.topic, qid=bookmark.question_id) }}" 
-                                           class="view-question-btn view-answer-btn">
+                                           class="view-question-btn">
                                             💡 View Answer
                                         </a>
                                     </div>
@@ -656,7 +852,7 @@
                         <small>💡 <strong>Tip:</strong> Click the ★ button on any question to save it here for quick review!</small>
                     </p>
                 </div>
-                <a href="{{ url_for('home') }}" class="btn btn-primary btn-lg">
+                <a href="{{ url_for('home') }}" class="btn btn-primary btn-lg" style="background: #1a3d4a; border: none; padding: 12px 24px; border-radius: 8px; color: white; text-decoration: none; display: inline-block;">
                     🚀 Explore Subjects
                 </a>
             </div>
@@ -665,7 +861,7 @@
         <!-- Back Link -->
         <div class="mt-6">
             <a href="{{ url_for('home') }}" 
-               class="inline-flex items-center space-x-2 bg-gray-100 hover:bg-blue-500 hover:text-white border border-gray-300 rounded-lg px-5 py-3 text-blue-600 text-sm transition-all duration-300 hover:-translate-x-1">
+               class="inline-flex items-center space-x-2 bg-gray-100 hover:bg-blue-500 hover:text-white border border-gray-300 rounded-lg px-5 py-3 text-blue-600 text-sm transition-all duration-300 hover:-translate-x-1" style="text-decoration: none;">
                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
                 </svg>
@@ -703,7 +899,7 @@
             }, 100);
         }
 
-        // Filter bookmarks by subject - ALL YOUR ORIGINAL FUNCTIONALITY
+        // Filter bookmarks by subject
         function filterBookmarks(subject) {
             const cards = document.querySelectorAll('.bookmark-card');
             const buttons = document.querySelectorAll('.filter-btn');
@@ -729,7 +925,7 @@
             });
         }
 
-        // Enhanced remove bookmark function - ALL YOUR ORIGINAL FUNCTIONALITY
+        // Enhanced remove bookmark function
         function removeBookmark(questionId, button) {
             if (!confirm('🗑️ Are you sure you want to remove this bookmark?\n\nThis action cannot be undone.')) {
                 return;
@@ -804,24 +1000,28 @@
             existingNotifications.forEach(notification => notification.remove());
             
             const notification = document.createElement('div');
-            notification.className = `notification-toast alert alert-${type === 'success' ? 'success' : 'danger'}`;
+            notification.className = `notification-toast`;
             notification.style.cssText = `
                 position: fixed;
                 top: 100px;
                 right: 20px;
                 z-index: 9999;
                 min-width: 300px;
+                max-width: 90vw;
                 padding: 15px 20px;
                 border-radius: 10px;
                 font-weight: 500;
                 box-shadow: 0 8px 25px rgba(0,0,0,0.15);
                 animation: slideInRight 0.4s ease-out;
+                background: ${type === 'success' ? '#d4edda' : '#f8d7da'};
+                color: ${type === 'success' ? '#155724' : '#721c24'};
+                border: 1px solid ${type === 'success' ? '#c3e6cb' : '#f5c6cb'};
             `;
             
             notification.innerHTML = `
-                <div class="d-flex justify-content-between align-items-center">
+                <div style="display: flex; justify-content: space-between; align-items: center;">
                     <span>${message}</span>
-                    <button type="button" class="btn-close" onclick="this.parentElement.parentElement.remove()"></button>
+                    <button type="button" style="background: none; border: none; font-size: 18px; cursor: pointer; color: inherit;" onclick="this.parentElement.parentElement.remove()">×</button>
                 </div>
             `;
             
@@ -861,6 +1061,9 @@
                     });
                 });
             });
+
+            // Prevent zoom on iOS when focusing on buttons
+            document.addEventListener('touchstart', function() {}, {passive: true});
         });
     </script>
 </body>
